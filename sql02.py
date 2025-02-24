@@ -1,12 +1,29 @@
 import pyodbc
 
-# Define connection parameters
-server = 'USPA01BISQL02'  # e.g., 'localhost', 'MY-PC\SQLEXPRESS'
+
+
+
+# Define SQL Server connection parameters
+server = 'USPA01BISQL01'  # e.g., 'localhost' or '192.168.1.100'
 database = 'EDW'
+username = 'TL2020'
+password = 'TEternal2021!'
+
+# Define the ODBC connection string
+conn_str = f"""
+    DRIVER={{ODBC Driver 17 for SQL Server}};
+    SERVER={server};
+    DATABASE={database};
+    UID={username};
+    PWD={password};
+"""
+
+
+
 
 # Use Windows Authentication
-conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-
+#conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
+conn = pyodbc.connect(conn_str)
 try:
     # Establish the connection
     conn = pyodbc.connect(conn_str)

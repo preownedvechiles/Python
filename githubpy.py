@@ -25,10 +25,10 @@ def extract():
         query = "SELECT id, name, age, salary FROM employees;"  # Modify query as needed
         df = pd.read_sql_query(query, conn)
         conn.close()
-        print("✅ Data extracted successfully!")
+        print("Data extracted successfully!")
         return df
     except Exception as e:
-        print(f"❌ Extraction failed: {e}")
+        print(f" Extraction failed: {e}")
         return None
 
 def transform(df):
@@ -56,7 +56,7 @@ def load(df):
         conn.close()
         print("Data loaded successfully!")
     except Exception as e:
-        print(f"❌ Loading failed: {e}")
+        print(f" Loading failed: {e}")
 
 # Run ETL pipeline
 if __name__ == "__main__":

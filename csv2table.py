@@ -7,8 +7,8 @@ import pyodbc
 # SQL Server connection details
 server = 'USPA01BISQL01'  # e.g., 'localhost' or '192.168.1.100'
 database = 'EDW'
-username = 'TL2020'
-password = 'TEternal2021!'
+username = 'rk'
+password = 'rk'
 table_name = 'import.testTab'
 csv_file = 'C:\\testTab\\testCsv.csv'  # Path to your CSV file
 timeout_seconds = 10 

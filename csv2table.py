@@ -5,11 +5,11 @@ import pyodbc
 
 
 # SQL Server connection details
-server = '<>'  # e.g., 'localhost' or '192.168.1.100'
-database = '<>'
-username = '<>'
-password = '<>!'
-table_name = 'import.<>'
+server = 'USPA01BISQL01'  # e.g., 'localhost' or '192.168.1.100'
+database = 'EDW'
+username = 'TL2020'
+password = 'TEternal2021!'
+table_name = 'import.testTab'
 csv_file = 'C:\\testTab\\testCsv.csv'  # Path to your CSV file
 
 # ODBC connection string

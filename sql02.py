@@ -7,7 +7,7 @@ import pyodbc
 server = 'USPA01BISQL01'  # e.g., 'localhost' or '192.168.1.100'
 database = 'EDW'
 username = 'TL2020'
-password = 'TEternal2021!'
+password = 'rk!'
 
 # Define the ODBC connection string
 conn_str = f"""

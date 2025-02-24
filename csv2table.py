@@ -19,7 +19,8 @@ conn_str = f"""
     SERVER={server};
     DATABASE={database};
     UID={username};
-    PWD={password}",timeout=timeout_seconds
+    PWD={password};
+    timeout=timeout_seconds;
 """   
 
 

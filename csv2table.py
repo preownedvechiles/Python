@@ -11,6 +11,7 @@ username = 'TL2020'
 password = 'TEternal2021!'
 table_name = 'import.testTab'
 csv_file = 'C:\\testTab\\testCsv.csv'  # Path to your CSV file
+timeout_seconds = 10 
 
 # ODBC connection string
 conn_str = f"""
@@ -18,8 +19,9 @@ conn_str = f"""
     SERVER={server};
     DATABASE={database};
     UID={username};
-    PWD={password};
-"""
+    PWD={password}",timeout=timeout_seconds
+"""   
+
 
 try:
     # Establish connection

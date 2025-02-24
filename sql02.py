@@ -4,10 +4,10 @@ import pyodbc
 
 
 # Define SQL Server connection parameters
-server = 'USPA01BISQL01'  # e.g., 'localhost' or '192.168.1.100'
+server = 'rk'  # e.g., 'localhost' or '192.168.1.100'
 database = 'EDW'
-username = 'TL2020'
-password = 'TEternal2021!'
+username = 'rk'
+password = 'rk!'
 
 # Define the ODBC connection string
 conn_str = f"""

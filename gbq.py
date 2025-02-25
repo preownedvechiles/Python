@@ -29,7 +29,7 @@ SELECT DISTINCT id, workitemId, createdAt, terminatedAt, duration, type, queues,
                 selectedQueue, priority, userId, dispositionId, complianceId, displayName, 
                 'sti' AS TenantId
 FROM `thrio-prod-sti.sti.DATA_WORKITEMS_EVENTS`
-WHERE DATE(_PARTITIONTIME) > DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
+WHERE DATE(_PARTITIONTIME) > = (SELECT max(DATE(_PARTITIONTIME))-1  FROM `thrio-prod-sti.sti.DATA_WORKITEMS_EVENTS`)
 
 """
 

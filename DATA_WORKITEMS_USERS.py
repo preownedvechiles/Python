@@ -3,7 +3,7 @@ from google.cloud import bigquery
 import pyodbc
 
 # Set Google credentials dynamically
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\gcp\thrio-prod-sti-058aff318be0.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\gcb\thrio-prod-sti-058aff318be0.json"
 
 # Initialize BigQuery client
 client = bigquery.Client()

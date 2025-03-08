@@ -34,7 +34,7 @@ try:
     cursor = conn.cursor()
     print("Connected to SQL Server successfully!")
 
-    truncate_query = "delete from edw.import.Campaign where tenantId='sti'"
+    truncate_query = "delete from import.Campaign where tenantId='sti'"
     cursor.execute(truncate_query)
     print("Deleted STI Tenant data successfully!")
                 

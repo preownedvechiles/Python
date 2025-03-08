@@ -52,7 +52,7 @@ try:
     # Insert results into SQL Server
     for row in results:
         data_to_insert = (
-            row.smsFromAddress
+            row.smsFromAddress,
             row.recordingAnalysisPercentage,
             row.answeringMachinePromptId,
             row.machineDetectionTimeout,

@@ -128,7 +128,7 @@ try:
             row.maxAttempts,
             row.deletedAt,
             row.finalUserStateId,
-            row.humanAction
+            row.humanAction,
             row.useForPredictive,
             row.abandonAction,
             row.name,

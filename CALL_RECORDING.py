@@ -53,7 +53,7 @@ try:
                    from_address = source.from_address, to_address = source.to_address, deletedAt = source.deletedAt, 
                    createdAt = source.createdAt, events = source.events, TenantId = source.TenantId
     WHEN NOT MATCHED THEN
-        INSERT (id,timestamp,userId,callId,type,filename,duration,from_address,to_address,deletedAt,createdAt,events, TenantId )
+        INSERT (id,timestamp,userId,callId,type,filename,duration,from,to,deletedAt,createdAt,events, TenantId )
         VALUES (source.id, source.timestamp, source.userId, 
                 source.callId, source.type, source.filename, source.duration, source.from_address, source.to_address, source.deletedAt, 
                 source.createdAt, source.events, source.TenantId);

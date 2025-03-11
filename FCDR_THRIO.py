@@ -42,7 +42,7 @@ try:
     print("Connected to SQL Server successfully!")
 
     # Execute the BigQuery query
-    query_job = client.query(query)
+    query_job = conn.query(query)
     results = query_job.result()
 
     # Insert or update query using MERGE

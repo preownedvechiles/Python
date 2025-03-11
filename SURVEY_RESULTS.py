@@ -30,7 +30,7 @@ client = bigquery.Client()
 
 server = 'USPA01BISQL01'
 
-database = 'EDW'
+database = 'DWH'
 
 username = 'TL2020'
 

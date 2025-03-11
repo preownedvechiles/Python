@@ -53,14 +53,14 @@ try:
     WHEN NOT MATCHED THEN
         INSERT (id,timestamp,userId,callId,type,filename,duration,from,to,deletedAt,createdAt,events, TenantId )
         VALUES (source.id, source.timestamp, source.userId, 
-                source.callId,source.type,source.filename, source.duration, source.from, source.to, source.deletedAt,source.createdAt,source.events,source.TenantId);
+                source.callId,source.type,source.filename, source.duration, source."from", source.to, source.deletedAt,source.createdAt,source.events,source.TenantId);
     """
 
     # Insert results into SQL Server
     for row in results:
         data_to_insert = (
             row.id, row.timestamp, row.userId, 
-            row.callId,row.type,row.filename, row.duration, row.from, row.to, row.deletedAt,row.createdAt,row.events,row.TenantId
+            row.callId,row.type,row.filename, row.duration, row."from", row.to, row.deletedAt,row.createdAt,row.events,row.TenantId
                          )
         cursor.execute(merge_query, data_to_insert)
 

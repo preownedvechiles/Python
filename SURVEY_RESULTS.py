@@ -6,9 +6,13 @@ import pyodbc
 
 from datetime import datetime
 
-currentdatetime = datetime.today()
+import logging
 
- 
+logging.basicConfig(level=logging.INFO)
+
+currentdatetime = datetime.now()  # Dynamically fetch the current timestamp
+
+print(currentdatetime) 
 
 # Set Google credentials dynamically
 
@@ -26,7 +30,7 @@ client = bigquery.Client()
 
 server = 'USPA01BISQL01'
 
-database = 'DWH'
+database = 'EDW'
 
 username = 'TL2020'
 
@@ -56,7 +60,9 @@ conn_str = f"""
 
 query = """
 
-SELECT  distinct id, createdAt, surveyId, workitemId, fieldId, response, 'sti' as TenantId, currentdatetime as CreatedTS, currentdatetime as LastModifiedTs
+SELECT  distinct id, createdAt, surveyId, workitemId, fieldId, response, 'sti' as TenantId 
+
+# , currentdatetime as CreatedTS, currentdatetime as LastModifiedTs
 
 	FROM `thrio-prod-sti.sti.SURVEY_RESULTS`  
 	
@@ -75,7 +81,7 @@ try:
 
     cursor = conn.cursor()
 
-    print("Connected to SQL Server successfully!")
+    logging.info("Connected to SQL Server successfully!")
 
  
 
@@ -125,9 +131,9 @@ try:
 
     for row in results:
 
-        data_to_insert = (row.id, row.CreatedAt, row.surveyId, row.workitemId, row.fieldId, row.Response, row.TenantId,
+        data_to_insert = (row.id, row.createdAt, row.surveyId, row.workitemId, row.fieldId, row.response, row.TenantId,
 
-                row.CreatedTS, row.LastModifiedTs)
+                currentdatetime, currentdatetime)
 
         cursor.execute(merge_query, data_to_insert)
 
@@ -137,13 +143,15 @@ try:
 
     conn.commit()
 
-    print("Data successfully inserted/updated in SQL Server!")
+    logging.info("Data successfully inserted/updated in SQL Server!")
 
- 
+
+# except Exception as e:
 
 except Exception as e:
+    logging.error(f"Error during execution: {e}", exc_info=True)
 
-    print(f"Error: {e}")
+ #   print(f"Error: {e}")
 
  
 
@@ -159,4 +167,6 @@ finally:
 
         conn.close()
 
-    print("Database connection closed.")
+    logging.info("Database connection closed.")
+    
+    print(currentdatetime)

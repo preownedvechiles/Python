@@ -44,7 +44,7 @@ try:
     merge_query = """
     MERGE INTO import.ScreenRecording AS target
     USING (SELECT ? AS workitemId,? AS filename,? AS duration,? AS id,? AS type,? AS createdAt, 
-    ? AS TenantId, ) 
+    ? AS TenantId) 
     AS source
     ON target.workitemId = source.workitemId and target.filename = source.filename and target.id = source.id and target.type = source.type and target.createdAt = source.createdAt and   target.TenantId = source.TenantId
     WHEN MATCHED THEN

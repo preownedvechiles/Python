@@ -46,25 +46,25 @@ try:
     # Insert or update query using MERGE
     merge_query = """
     MERGE INTO import.DAP10012_ReportsWorkitems AS target
-    USING (SELECT ? AS [id], ? AS [createdAt], ? AS [terminatedAt], 
+    USING (SELECT ? AS [Id], ? AS [createdAt], ? AS [terminatedAt], 
                   ? AS [Object_ToNumber], ? AS [Object_DataWorkitemId])
     AS source
-    ON target.[id] = source.[id] 
+    ON target.[Id] = source.[Id] 
        AND target.[createdAt] = source.[createdAt] 
        AND target.[terminatedAt] = source.[terminatedAt]
     WHEN MATCHED THEN
         UPDATE SET [Object_ToNumber] = source.[Object_ToNumber], 
                    [Object_DataWorkitemId] = source.[Object_DataWorkitemId]
     WHEN NOT MATCHED THEN
-        INSERT ([id], [createdAt], [terminatedAt], [Object_ToNumber], [Object_DataWorkitemId])
-        VALUES (source.[id], source.[createdAt], source.[terminatedAt],
+        INSERT ([Id], [createdAt], [terminatedAt], [Object_ToNumber], [Object_DataWorkitemId])
+        VALUES (source.[Id], source.[createdAt], source.[terminatedAt],
                 source.[Object_ToNumber], source.[Object_DataWorkitemId]);
     """
 
     # Insert results into SQL Server
     for row in results:
         data_to_insert = (
-            row.id, row.createdAt, row.terminatedAt,
+            row.Id, row.createdAt, row.terminatedAt,
             row.Object_ToNumber, row.Object_DataWorkitemId
         )
         cursor.execute(merge_query, data_to_insert)

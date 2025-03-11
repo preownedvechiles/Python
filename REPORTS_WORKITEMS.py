@@ -89,7 +89,7 @@ try:
 
     USING (SELECT ? AS id, ? AS createdAt, ? AS terminatedAt, 
 
-                  ? AS Object_ToNumber, ? AS Object_DataWorkitemId, ? AS TenantId)
+                  ? AS Object_ToNumber, ? AS Object_DataWorkitemId)
 
     AS source
 
@@ -103,11 +103,11 @@ try:
 
     WHEN NOT MATCHED THEN
 
-        INSERT (id, createdAt, terminatedAt, Object_ToNumber, Object_DataWorkitemId, TenantId)
+        INSERT (id, createdAt, terminatedAt, Object_ToNumber, Object_DataWorkitemId)
 
         VALUES (source.id, source.createdAt, source.terminatedAt,
 
-                source.Object_ToNumber, source.Object_DataWorkitemId, source.TenantId);
+                source.Object_ToNumber, source.Object_DataWorkitemId);
 
     """
 
@@ -119,7 +119,7 @@ try:
 
         data_to_insert = (row.id, row.createdAt, row.terminatedAt,
 	    
-                row.Object_ToNumber, row.Object_DataWorkitemId, row.TenantId)
+                row.Object_ToNumber, row.Object_DataWorkitemId)
 
         cursor.execute(merge_query, data_to_insert)
 

@@ -50,7 +50,7 @@ try:
     WHEN MATCHED THEN
         UPDATE SET timestamp = source.timestamp, userId = source.userId, callId= source.callId , 
                    type = source.type, filename = source.filename, duration = source.duration,
-                   from_address = source.from_address, to_address = source.to_address, deletedAt = source.deletedAt, 
+                   from = source.from_address, to = source.to_address, deletedAt = source.deletedAt, 
                    createdAt = source.createdAt, events = source.events, TenantId = source.TenantId
     WHEN NOT MATCHED THEN
         INSERT (id,timestamp,userId,callId,type,filename,duration,from,to,deletedAt,createdAt,events, TenantId )

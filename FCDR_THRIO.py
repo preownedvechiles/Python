@@ -3,10 +3,7 @@ from google.cloud import bigquery
 import pyodbc
 
 # Set Google credentials dynamically
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\gcp\thrio-prod-sti-058aff318be0.json"
 
-# Initialize BigQuery client
-# client = bigquery.Client()
 
 # Define SQL Server connection parameters
 server = 'USPA01BISQL01'
@@ -108,7 +105,7 @@ try:
     print("Connected to SQL Server successfully!")
 
     # Execute the BigQuery query
-    query_job = client.query(query)  
+   
     results = query_job.result()  
 
     # Insert or update query using MERGE

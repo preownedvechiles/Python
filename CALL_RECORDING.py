@@ -60,7 +60,7 @@ try:
     for row in results:
         data_to_insert = (
             row.id, row.timestamp, row.userId, 
-            row.callId,row.type,row.filename, row.duration, row.'from', row.to, row.deletedAt,row.createdAt,row.events,row.TenantId
+            row.callId,row.type,row.filename, row.duration, getattr(row, 'from'), row.to, row.deletedAt,row.createdAt,row.events,row.TenantId
                          )
         cursor.execute(merge_query, data_to_insert)
 

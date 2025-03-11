@@ -1,28 +1,44 @@
-import os
 import pyodbc
-from google.cloud import bigquery
-
-# Set up BigQuery client (ensure your Google credentials are set up properly)
-client = bigquery.Client()
-
-# Define SQL Server connection parameters
-server = 'USPA01BISQL01'
-database = 'DWH'
+ 
+# SQL Server connection parameters for both source and target databases
+source_server = 'USPA01BISQL01'
+source_database = 'DWH'
+target_server = 'USPA01BISQL01'
+target_database = 'DWH'
 username = 'TL2020'
-password = 'TEternal2021!'  # Consider using environment variables for security
-
-# Define the ODBC connection string
-conn_str = f"""
+password = 'TEternal2021!'
+ 
+# Define connection strings
+source_conn_str = f"""
     DRIVER={{ODBC Driver 17 for SQL Server}};
-    SERVER={server};
-    DATABASE={database};
+    SERVER={source_server};
+    DATABASE={source_database};
     UID={username};
     PWD={password};
 """
-
-# Define the query to fetch data from BigQuery
-query = """
-SELECT dwCreatedAtDate, dwTerminatedAtDate, dwDispositionAtDate, workItemId, campaignId, campaignName,
+ 
+target_conn_str = f"""
+    DRIVER={{ODBC Driver 17 for SQL Server}};
+    SERVER={target_server};
+    DATABASE={target_database};
+    UID={username};
+    PWD={password};
+"""
+ 
+try:
+    # Connect to source database
+    source_conn = pyodbc.connect(source_conn_str)
+    source_cursor = source_conn.cursor()
+ 
+    # Connect to target database
+    target_conn = pyodbc.connect(target_conn_str)
+    target_cursor = target_conn.cursor()
+ 
+    print("Connected to both source and target databases!")
+ 
+    # Define the query to retrieve data from the source database
+    source_query = """
+    SELECT dwCreatedAtDate, dwTerminatedAtDate, dwDispositionAtDate, workItemId, campaignId, campaignName,
        fromAddress, toAddress, channelTypeGroup, channelType, terminationReason, dispositionId, dispositionName,
        TenantId, queueId, queueName, row_num_queues, QUEUEMAPPINGID, PROGRAMID, PROGRAMIDTXT, Program, SubProgram,
        VoiceANSSLA_seconds, VoiceABNSLA_seconds, UserId, Username, UserFirstName, UserLastName, UserProfileId,
@@ -34,19 +50,14 @@ SELECT dwCreatedAtDate, dwTerminatedAtDate, dwDispositionAtDate, workItemId, cam
        terminatedonhold, userterminated, userterminatedphonehangup, userterminatedphonehanguponhold, workflowterminated,
        supervisorterminated, LanguageCode
 FROM transformation.VW_DAP10000_FCDR_Thrio
-"""
-
-try:
-    # Fetch data from BigQuery
-    results = client.query(query).result()  # This will execute the query and return the results
-
-    # Connect to SQL Server
-    with pyodbc.connect(conn_str) as conn:
-        with conn.cursor() as cursor:
-            # Define the query to merge data
-            merge_query = """
-            MERGE INTO Transformation.DAP10000_F_CDR_Thrio AS target
-            USING (SELECT ? AS workItemId, ? AS dwCreatedAtDate, ? AS dwTerminatedAtDate, ? AS dwDispositionAtDate, 
+    """
+    source_cursor.execute(source_query)
+    source_data = source_cursor.fetchall()
+ 
+    # Define the MERGE query to update/insert data in the target database
+    merge_query = """
+    MERGE INTO Transformation.DAP10000_F_CDR_Thrio AS target
+    USING (SELECT ? AS workItemId, ? AS dwCreatedAtDate, ? AS dwTerminatedAtDate, ? AS dwDispositionAtDate, 
                          ? AS campaignId, ? AS campaignName, ? AS fromAddress, ? AS toAddress, ? AS channelTypeGroup, 
                          ? AS channelType, ? AS terminationReason, ? AS dispositionId, ? AS dispositionName, ? AS TenantId, 
                          ? AS queueId, ? AS queueName, ? AS row_num_queues, ? AS QUEUEMAPPINGID, ? AS PROGRAMID, 
@@ -62,9 +73,9 @@ try:
                          ? AS noanswerterminated, ? AS terminated, ? AS terminatedonhold, ? AS userterminated, 
                          ? AS userterminatedphonehangup, ? AS userterminatedphonehanguponhold, ? AS workflowterminated, 
                          ? AS supervisorterminated, ? AS LanguageCode) AS source
-            ON target.workItemId = source.workItemId
-            WHEN MATCHED THEN
-                UPDATE SET dwCreatedAtDate = source.dwCreatedAtDate, dwTerminatedAtDate = source.dwTerminatedAtDate, 
+   ON target.workItemId = source.workItemId
+    WHEN MATCHED THEN
+        UPDATE SET dwCreatedAtDate = source.dwCreatedAtDate, dwTerminatedAtDate = source.dwTerminatedAtDate, 
                           dwDispositionAtDate = source.dwDispositionAtDate, campaignId = source.campaignId, 
                           campaignName = source.campaignName, fromAddress = source.fromAddress, toAddress = source.toAddress, 
                           channelTypeGroup = source.channelTypeGroup, channelType = source.channelType, 
@@ -124,12 +135,11 @@ try:
                         source.terminated, source.terminatedonhold, source.userterminated, source.userterminatedphonehangup, 
                         source.userterminatedphonehanguponhold, source.workflowterminated, source.supervisorterminated, 
                         source.LanguageCode)
-            """
-
-            # Insert or update the data in batches
-            for row in results:
-                data_to_insert = (
-                    row.dwCreatedAtDate, row.dwTerminatedAtDate, row.dwDispositionAtDate, row.workItemId, row.campaignId, 
+    """
+ 
+    # Loop through the source data and execute the MERGE statement
+    for row in source_data:
+        data_to_insert = (row.dwCreatedAtDate, row.dwTerminatedAtDate, row.dwDispositionAtDate, row.workItemId, row.campaignId, 
                     row.campaignName, row.fromAddress, row.toAddress, row.channelTypeGroup, row.channelType, row.terminationReason, 
                     row.dispositionId, row.dispositionName, row.TenantId, row.queueId, row.queueName, row.row_num_queues, 
                     row.QUEUEMAPPINGID, row.PROGRAMID, row.PROGRAMIDTXT, row.Program, row.SubProgram, row.VoiceANSSLA_seconds, 
@@ -142,14 +152,27 @@ try:
                     row.ExternalTransfer, row.UserTransfer, row.QueueTransfer, row.abandonterminated, row.busyterminated, 
                     row.errorterminated, row.noanswerterminated, row.terminated, row.terminatedonhold, row.userterminated, 
                     row.userterminatedphonehangup, row.userterminatedphonehanguponhold, row.workflowterminated, 
-                    row.supervisorterminated, row.LanguageCode
-                )
-                cursor.execute(merge_query, data_to_insert)
-
-            # Commit the transaction
-            conn.commit()
-
-    print("Data inserted successfully!")
-    
+                    row.supervisorterminated, row.LanguageCode)
+        target_cursor.execute(merge_query, data_to_insert)
+ 
+    # Commit the transaction in the target database
+    target_conn.commit()
+ 
+    print("Data successfully merged, updated, or inserted into the target database!")
+ 
 except Exception as e:
-    print(f"An error occurred: {e}")
+    print(f"Error: {e}")
+ 
+finally:
+    # Close the connections
+    if source_cursor:
+        source_cursor.close()
+    if source_conn:
+        source_conn.close()
+ 
+    if target_cursor:
+        target_cursor.close()
+    if target_conn:
+        target_conn.close()
+ 
+    print("Database connections closed.")

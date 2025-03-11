@@ -53,7 +53,7 @@ try:
     WHEN NOT MATCHED THEN
         INSERT (id,timestamp,userId,callId,type,filename,duration,from,to,deletedAt,createdAt,events, TenantId )
         VALUES (source.id, source.timestamp, source.userId, 
-                source.callId,source.type,source.filename, source.duration, source.from, source.to, source.deletedAt,source.createdAt,source.events,source.TenantId);
+                source.callId,source.type,source.filename, source.duration, getattr(source, 'from'), source.to, source.deletedAt,source.createdAt,source.events,source.TenantId);
     """
 
     # Insert results into SQL Server

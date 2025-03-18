@@ -34,7 +34,7 @@ database = 'DWH'
 
 username = 'TL2020'
 
-password = 'TEternal2021!'  # Consider using environment variables for security
+password = '!'  # Consider using environment variables for security
 
  
 

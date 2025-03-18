@@ -12,7 +12,7 @@ client = bigquery.Client()
 server = 'USPA01BISQL01'
 database = 'EDW'
 username = 'TL2020'
-password = 'TEternal2021!'  # Consider using environment variables for security
+password = '!'  # Consider using environment variables for security
 
 # Define the ODBC connection string
 conn_str = f"""

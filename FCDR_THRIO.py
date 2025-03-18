@@ -6,7 +6,7 @@ source_database = 'DWH'
 target_server = 'USPA01BISQL01'
 target_database = 'DWH'
 username = 'TL2020'
-password = 'TEternal2021!'
+password = '!'
 
 # Define connection strings
 source_conn_str = f"""
